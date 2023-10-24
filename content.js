@@ -1,5 +1,5 @@
 if (confirm("This extension will display jump scares with loud audio. Do you wish to proceed?")) {
-    setTimeout(() => {
+    let jumpScareTimeout = setTimeout(() => {
         const jumpScares = [
             { imgSrc: "path_to_your_image1.jpg", audioSrc: "path_to_your_audio1.mp3" },
             { imgSrc: "path_to_your_image2.jpg", audioSrc: "path_to_your_audio2.mp3" },
@@ -26,4 +26,13 @@ if (confirm("This extension will display jump scares with loud audio. Do you wis
       `;
         document.body.appendChild(jumpScareContainer);
     }, Math.random() * 10000); // Adjust timing as needed
-}  
+
+    chrome.runtime.onMessage.addListener(
+        function (request, sender, sendResponse) {
+            if (request.message === "disable_jumpscares") {
+                clearTimeout(jumpScareTimeout);
+                // Add any additional cleanup logic here if necessary
+            }
+        }
+    );
+}
