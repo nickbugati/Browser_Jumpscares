@@ -1,11 +1,12 @@
 chrome.runtime.onInstalled.addListener(async () => {
     await chrome.storage.local.set({ jumpscareEnabled: true });
-    resetJumpScare();
+    setJumpScareAlarm();
 });
 
-async function resetJumpScare() {
-    const randomTime = Math.random() * 10000;
-    await chrome.alarms.create('jumpscareAlarm', { delayInMinutes: randomTime / 60000 });
+function setJumpScareAlarm() {
+    // Set an alarm to go off in a random time within 20 minutes
+    const randomTime = Math.random() * 1;
+    chrome.alarms.create('jumpscareAlarm', { delayInMinutes: randomTime });
 }
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
@@ -13,7 +14,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         const result = await chrome.storage.local.get('jumpscareEnabled');
         if (result.jumpscareEnabled) {
             initiateJumpScare();
-            resetJumpScare();
+            setJumpScareAlarm();
         }
     }
 });
@@ -66,6 +67,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         chrome.alarms.clear('jumpscareAlarm');
     } else if (request.message === "reset_jumpscares") {
         chrome.storage.local.set({ jumpscareEnabled: true });
-        resetJumpScare();
+        setJumpScareAlarm();
     }
 });
