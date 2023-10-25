@@ -38,18 +38,16 @@ function triggerJumpScare() {
             imgSrc: chrome.runtime.getURL("images/chica.png"),
             audioSrc: chrome.runtime.getURL("audio/chica.mp3")
         }
+        // ... other jump scares
     ];
 
     const randomIndex = Math.floor(Math.random() * jumpScares.length);
     const selectedJumpScare = jumpScares[randomIndex];
 
+    // Display the jumpscare image
     const jumpScareContainer = document.createElement('div');
     jumpScareContainer.innerHTML = `
         <img src="${selectedJumpScare.imgSrc}" alt="Jump Scare" />
-        <audio autoplay onended="this.parentElement.remove()">
-            <source src="${selectedJumpScare.audioSrc}" type="audio/mpeg">
-            Your browser does not support the audio tag.
-        </audio>
     `;
     jumpScareContainer.style.cssText = `
         position: fixed;
@@ -59,6 +57,21 @@ function triggerJumpScare() {
         z-index: 10000;
     `;
     document.body.appendChild(jumpScareContainer);
+
+    // Play the jumpscare audio using Web Audio API
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    fetch(selectedJumpScare.audioSrc)
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+        .then(audioBuffer => {
+            const source = audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(audioContext.destination);
+            source.start();
+            source.onended = () => {
+                jumpScareContainer.remove();
+            };
+        });
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
