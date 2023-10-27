@@ -3,12 +3,6 @@ chrome.runtime.onInstalled.addListener(async () => {
     setJumpScareAlarm();
 });
 
-function setJumpScareAlarm() {
-    // Set an alarm to go off in a random time within 20 minutes
-    const randomTime = Math.random() * 1;
-    chrome.alarms.create('jumpscareAlarm', { delayInMinutes: randomTime });
-}
-
 chrome.alarms.onAlarm.addListener(async (alarm) => {
     if (alarm.name === 'jumpscareAlarm') {
         const result = await chrome.storage.local.get('jumpscareEnabled');
@@ -18,6 +12,33 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         }
     }
 });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.message === "toggle_jumpscares") {
+        chrome.storage.local.get('jumpscareEnabled', (result) => {
+            // Toggle the jumpscareEnabled value
+            const newState = !result.jumpscareEnabled;
+            chrome.storage.local.set({ jumpscareEnabled: newState });
+            if (newState) {
+                setJumpScareAlarm();
+            } else {
+                chrome.alarms.clear('jumpscareAlarm');
+            }
+        });
+    } else if (request.message === "disable_jumpscares") {
+        chrome.storage.local.set({ jumpscareEnabled: false });
+        chrome.alarms.clear('jumpscareAlarm');
+    } else if (request.message === "reset_jumpscares") {
+        chrome.storage.local.set({ jumpscareEnabled: true });
+        setJumpScareAlarm();
+    }
+});
+
+function setJumpScareAlarm() {
+    // Set an alarm to go off in a random time within 20 minutes
+    const randomTime = Math.random() * 1;
+    chrome.alarms.create('jumpscareAlarm', { delayInMinutes: randomTime });
+}
 
 function initiateJumpScare() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -106,13 +127,3 @@ function triggerJumpScare() {
             };
         });
 }
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.message === "disable_jumpscares") {
-        chrome.storage.local.set({ jumpscareEnabled: false });
-        chrome.alarms.clear('jumpscareAlarm');
-    } else if (request.message === "reset_jumpscares") {
-        chrome.storage.local.set({ jumpscareEnabled: true });
-        setJumpScareAlarm();
-    }
-});
