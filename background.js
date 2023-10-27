@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 function setJumpScareAlarm() {
     // Set an alarm to go off in a random time within 20 minutes
-    const randomTime = Math.random() * 1;
+    const randomTime = Math.random() * 20;
     chrome.alarms.create('jumpscareAlarm', { delayInMinutes: randomTime });
 }
 
@@ -141,7 +141,7 @@ function triggerJumpScare() {
             // Display the jumpscare image with shake animation
             const jumpScareContainer = document.createElement('div');
             jumpScareContainer.innerHTML = `
-                <img src="${selectedJumpScare.imgSrc}" alt="Jump Scare" />
+            <img src="${selectedJumpScare.imgSrc}" alt="Jump Scare" style="max-width: 100vw; max-height: 100vh; width: auto; height: auto;" />
             `;
             jumpScareContainer.style.cssText = `
                 position: fixed;
