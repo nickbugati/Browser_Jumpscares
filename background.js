@@ -66,7 +66,26 @@ function triggerJumpScare() {
                 return;
             }
 
-            // Display the jumpscare image
+            // Inject the shake keyframes CSS
+            const styleElement = document.createElement('style');
+            styleElement.textContent = `
+                @keyframes shake {
+                    0% { transform: translate(-50%, -50%) translate(0, 0); }
+                    10% { transform: translate(-50%, -50%) translate(-10px, -5px); }
+                    20% { transform: translate(-50%, -50%) translate(10px, 5px); }
+                    30% { transform: translate(-50%, -50%) translate(-10px, -5px); }
+                    40% { transform: translate(-50%, -50%) translate(10px, 5px); }
+                    50% { transform: translate(-50%, -50%) translate(-10px, -5px); }
+                    60% { transform: translate(-50%, -50%) translate(10px, 5px); }
+                    70% { transform: translate(-50%, -50%) translate(-10px, -5px); }
+                    80% { transform: translate(-50%, -50%) translate(10px, 5px); }
+                    90% { transform: translate(-50%, -50%) translate(-10px, -5px); }
+                    100% { transform: translate(-50%, -50%) translate(0, 0); }
+                }
+            `;
+            document.head.appendChild(styleElement);
+
+            // Display the jumpscare image with shake animation
             const jumpScareContainer = document.createElement('div');
             jumpScareContainer.innerHTML = `
                 <img src="${selectedJumpScare.imgSrc}" alt="Jump Scare" />
@@ -77,11 +96,13 @@ function triggerJumpScare() {
                 left: 50%;
                 transform: translate(-50%, -50%);
                 z-index: 10000;
+                animation: shake 0.5s infinite;
             `;
             document.body.appendChild(jumpScareContainer);
 
             source.onended = () => {
                 jumpScareContainer.remove();
+                styleElement.remove(); // remove the style once done
             };
         });
 }
