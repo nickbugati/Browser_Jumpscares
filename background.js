@@ -37,6 +37,10 @@ function triggerJumpScare() {
         {
             imgSrc: chrome.runtime.getURL("images/chica.png"),
             audioSrc: chrome.runtime.getURL("audio/chica.mp3")
+        },
+        {
+            imgSrc: chrome.runtime.getURL("images/bear.png"),
+            audioSrc: chrome.runtime.getURL("audio/bear.mp3")
         }
         // ... other jump scares
     ];
@@ -44,22 +48,9 @@ function triggerJumpScare() {
     const randomIndex = Math.floor(Math.random() * jumpScares.length);
     const selectedJumpScare = jumpScares[randomIndex];
 
-    // Display the jumpscare image
-    const jumpScareContainer = document.createElement('div');
-    jumpScareContainer.innerHTML = `
-        <img src="${selectedJumpScare.imgSrc}" alt="Jump Scare" />
-    `;
-    jumpScareContainer.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 10000;
-    `;
-    document.body.appendChild(jumpScareContainer);
-
     // Play the jumpscare audio using Web Audio API
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
     fetch(selectedJumpScare.audioSrc)
         .then(response => response.arrayBuffer())
         .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
@@ -68,6 +59,27 @@ function triggerJumpScare() {
             source.buffer = audioBuffer;
             source.connect(audioContext.destination);
             source.start();
+
+            // Check if audioContext is running
+            if (audioContext.state !== "running") {
+                // If not running, it means autoplay might be blocked. Return early.
+                return;
+            }
+
+            // Display the jumpscare image
+            const jumpScareContainer = document.createElement('div');
+            jumpScareContainer.innerHTML = `
+                <img src="${selectedJumpScare.imgSrc}" alt="Jump Scare" />
+            `;
+            jumpScareContainer.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 10000;
+            `;
+            document.body.appendChild(jumpScareContainer);
+
             source.onended = () => {
                 jumpScareContainer.remove();
             };
