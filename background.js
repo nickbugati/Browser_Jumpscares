@@ -62,7 +62,19 @@ function triggerJumpScare() {
         {
             imgSrc: chrome.runtime.getURL("images/bear.png"),
             audioSrc: chrome.runtime.getURL("audio/bear.mp3")
-        }
+        },
+        {
+            imgSrc: chrome.runtime.getURL("images/doll.png"),
+            audioSrc: chrome.runtime.getURL("audio/doll.mp3")
+        },
+        {
+            imgSrc: chrome.runtime.getURL("images/cat.png"),
+            audioSrc: chrome.runtime.getURL("audio/cat.mp3")
+        },
+        {
+            imgSrc: chrome.runtime.getURL("images/pt.png"),
+            audioSrc: chrome.runtime.getURL("audio/pt.mp3")
+        },
         // ... other jump scares
     ];
 
