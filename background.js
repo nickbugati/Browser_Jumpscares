@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 function setJumpScareAlarm() {
     // Set an alarm to go off in a random time within 20 minutes
-    const randomTime = Math.random() * 20;
+    const randomTime = Math.random() * 5;
     chrome.alarms.create('jumpscareAlarm', { delayInMinutes: randomTime });
 }
 
@@ -59,42 +59,42 @@ function triggerJumpScare() {
             imgSrc: chrome.runtime.getURL("images/chica.png"),
             audioSrc: chrome.runtime.getURL("audio/chica.mp3")
         },
-        {
+        /*{
             imgSrc: chrome.runtime.getURL("images/bear.png"),
             audioSrc: chrome.runtime.getURL("audio/bear.mp3")
-        },
-        {
+        },*/
+        /*{
             imgSrc: chrome.runtime.getURL("images/doll.png"),
             audioSrc: chrome.runtime.getURL("audio/doll.mp3")
-        },
-        {
+        },*/
+        /*{
             imgSrc: chrome.runtime.getURL("images/cat.png"),
             audioSrc: chrome.runtime.getURL("audio/cat.mp3")
-        },
-        {
+        },*/
+        /*{
             imgSrc: chrome.runtime.getURL("images/pt.png"),
             audioSrc: chrome.runtime.getURL("audio/pt.mp3")
-        },
-        {
+        },*/
+        /*{
             imgSrc: chrome.runtime.getURL("images/girl.png"),
             audioSrc: chrome.runtime.getURL("audio/girl.mp3")
-        },
-        {
+        },*/
+        /*{
             imgSrc: chrome.runtime.getURL("images/nun.png"),
             audioSrc: chrome.runtime.getURL("audio/nun.mp3")
-        },
-        {
+        },*/
+        /*{
             imgSrc: chrome.runtime.getURL("images/re.png"),
             audioSrc: chrome.runtime.getURL("audio/re.mp3")
-        },
+        },*/
         {
             imgSrc: chrome.runtime.getURL("images/obunga.png"),
             audioSrc: chrome.runtime.getURL("audio/obunga.mp3")
         },
-        {
+        /*{
             imgSrc: chrome.runtime.getURL("images/bonnie.png"),
             audioSrc: chrome.runtime.getURL("audio/bonnie.mp3")
-        },
+        },*/
         // ... other jump scares
     ];
 
